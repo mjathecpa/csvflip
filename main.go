@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -14,29 +14,48 @@ func main() {
 	s := selectFile()
 	// fmt.Printf("you picked %s", s)
 
-	csvFile, _ := os.Open(s)
-	reader := csv.NewReader(bufio.NewReader(csvFile))
+	// input/reader
+	fi, _ := os.Open(s)
+	r := csv.NewReader(fi)
 
-	outFile, err := os.Create(selectFile())
-	if err != nil {
-		log.Fatalf("failed creating file: %s", err)
-	}
-	csvWriter := csv.NewWriter(csvFile)
-	csvWriter.Comma = '|'
-
+	// Iterate through the records
 	for {
-		line, error := reader.Read()
-		if error == io.EOF {
+		// Read each record from csv
+		rec, err := r.Read()
+		if err == io.EOF {
 			break
-		} else if error != nil {
-			log.Fatal(error)
 		}
-		// write to file
-		csvWriter.Write(line)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("Reader value: %s\n", rec[0])
 	}
 
-	csvWriter.Flush()
-	outFile.Close()
+	// output/writer
+	// fo, err := os.Create(selectFile())
+	// if err != nil {
+	// 	log.Fatalf("failed creating file: %s", err)
+	// }
+
+	// w := csv.NewWriter(fo)
+	// w.Comma = '|'
+
+	/*
+		for {
+			line, error := reader.Read()
+			if error == io.EOF {
+				break
+			} else if error != nil {
+				log.Fatal(error)
+			}
+			fmt.Printf("Length of line is: %s", strconv.Itoa(len(line)))
+			fmt.Println
+			// write to file
+			csvWriter.Write(line)
+		}*/
+
+	// w.Flush()
+	// fo.Close()
 }
 
 func selectFolder() string {

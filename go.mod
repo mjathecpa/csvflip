@@ -1,4 +1,4 @@
-module gocsv_switch
+module CsvFlip
 
 go 1.15
 
